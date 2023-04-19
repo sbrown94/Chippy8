@@ -16,5 +16,11 @@
             stackPtr--;
             return stack[stackPtr+1];
         }
+
+        public void Push(int value)
+        {
+            stackPtr++;
+            stack[stackPtr] = value;
+        }
     }
 }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Chippy8.Core
+﻿namespace Chippy8.Core
 {
-    internal class IRegisters
+    public interface IRegisters
     {
+        public void setVReg(int register, byte value);
+        public byte getVReg(int register);
     }
 }

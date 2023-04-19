@@ -9,8 +9,12 @@
             pCounter = 0;
         }
 
+        public int Get() => pCounter;
+
         public void Increment() => pCounter++;
 
         public void Decrement() => pCounter--;
+
+        public void SetTo(int value) => pCounter = value;
     }
 }

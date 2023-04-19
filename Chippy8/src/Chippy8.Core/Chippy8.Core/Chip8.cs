@@ -33,18 +33,38 @@
             soundTimer = false;
         }
 
+        // Refer to http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#3.1 for instruction documentation
         public void ExecuteInstruction(byte instruction)
         {
-            switch (instruction)
+            switch (instruction & 0xF000)
             {
-                case 0x00E0:    // CLS
-                    _screen.ClearScreen();
-                    break; 
+                case 0x0000:
 
-                case 0x00EE:    // RET
-                    _stack.Pop();
-                    _counter.Increment();
+                    switch (instruction)
+                    {
+                        case 0x00E0:    // CLS
+                            _screen.ClearScreen();
+                            break;
+
+                        case 0x00EE:    // RET
+                            _counter.SetTo(_stack.Pop());
+                            break;
+                        default:
+                            throw new InvalidOperationException("not implemented");
+                    }
+                break;
+
+                case 0x1000:    // JP addr
+                    _counter.SetTo(instruction & 0x0FFF);
                     break;
+
+                case 0x2000:    // CALL addr
+                    _stack.Push(_counter.Get());
+                    _counter.SetTo(instruction & 0x0FFF);
+                    break;
+
+                case 0x3000:    // SE Vx, byte
+
             }
         }
     }

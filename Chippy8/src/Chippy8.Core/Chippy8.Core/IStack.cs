@@ -3,5 +3,6 @@
     public interface IStack
     {
         public byte Pop();
+        public void Push(int value);
     }
 }

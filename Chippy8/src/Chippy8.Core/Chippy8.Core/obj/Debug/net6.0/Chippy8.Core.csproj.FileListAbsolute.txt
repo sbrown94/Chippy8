@@ -1,0 +1,5 @@
+C:\Projects\Chippy8\Chippy8\src\Chippy8.Core\Chippy8.Core\obj\Debug\net6.0\Chippy8.Core.csproj.AssemblyReference.cache
+C:\Projects\Chippy8\Chippy8\src\Chippy8.Core\Chippy8.Core\obj\Debug\net6.0\Chippy8.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\Chippy8\Chippy8\src\Chippy8.Core\Chippy8.Core\obj\Debug\net6.0\Chippy8.Core.AssemblyInfoInputs.cache
+C:\Projects\Chippy8\Chippy8\src\Chippy8.Core\Chippy8.Core\obj\Debug\net6.0\Chippy8.Core.AssemblyInfo.cs
+C:\Projects\Chippy8\Chippy8\src\Chippy8.Core\Chippy8.Core\obj\Debug\net6.0\Chippy8.Core.csproj.CoreCompileInputs.cache

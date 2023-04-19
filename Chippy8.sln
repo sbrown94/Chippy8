@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{906A8239-B497-43BD-9F8E-CF08FC74A58B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chippy8.Core", "Chippy8.Core", "{89E5C3AC-7C06-41E6-B673-C559384FAAA0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chippy8.GUI", "Chippy8.GUI", "{6DEE7DFF-2CAC-4964-ADB2-0E5161441416}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{3D5183E6-0E0A-491E-88E3-1A2470C94AB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chippy8.Core", "Chippy8\src\Chippy8.Core\Chippy8.Core\Chippy8.Core.csproj", "{9EE0E1C5-956C-4B4C-8E08-E6817466BF68}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9EE0E1C5-956C-4B4C-8E08-E6817466BF68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EE0E1C5-956C-4B4C-8E08-E6817466BF68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EE0E1C5-956C-4B4C-8E08-E6817466BF68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EE0E1C5-956C-4B4C-8E08-E6817466BF68}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{89E5C3AC-7C06-41E6-B673-C559384FAAA0} = {906A8239-B497-43BD-9F8E-CF08FC74A58B}
+		{6DEE7DFF-2CAC-4964-ADB2-0E5161441416} = {906A8239-B497-43BD-9F8E-CF08FC74A58B}
+		{9EE0E1C5-956C-4B4C-8E08-E6817466BF68} = {89E5C3AC-7C06-41E6-B673-C559384FAAA0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A9690F4B-D143-4003-B1FE-E232091878BD}
+	EndGlobalSection
+EndGlobal

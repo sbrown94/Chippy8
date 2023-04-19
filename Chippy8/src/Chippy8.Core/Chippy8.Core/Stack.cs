@@ -17,7 +17,7 @@
             return stack[stackPtr+1];
         }
 
-        public void Push(int value)
+        public void Push(byte value)
         {
             stackPtr++;
             stack[stackPtr] = value;

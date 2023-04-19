@@ -15,11 +15,19 @@
             soundReg = new byte();
         }
 
-        public void setVReg(int register, byte value)
+        public void SetVReg(int register, int value)
         {
-            vReg[register] = value;
+            vReg[register] = (byte)value;
         }
 
-        public byte getVReg(int register) => vReg[register];
+        public byte GetVReg(int register) => vReg[register];
+
+        public void AddAtVReg(int register, int value) => vReg[register] = (byte)(vReg[register] + value);
+
+        public void BitwiseOrToVx(int regX, int regY) => vReg[regX] = (byte)(regX | regY);
+
+        public void BitwiseAndToVx(int regX, int regY) => vReg[regX] = (byte)(regX & regY);
+
+        public void BitwiseXorToVx(int regX, int regY) => vReg[regX] = (byte)(regX ^ regY);
     }
 }

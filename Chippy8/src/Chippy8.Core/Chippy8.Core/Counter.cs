@@ -11,9 +11,9 @@
 
         public int Get() => pCounter;
 
-        public void Increment() => pCounter++;
+        public void Increment() => pCounter+=2;
 
-        public void Decrement() => pCounter--;
+        public void Decrement() => pCounter-=2;
 
         public void SetTo(int value) => pCounter = value;
     }

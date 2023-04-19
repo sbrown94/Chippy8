@@ -6,28 +6,18 @@
         private IScreen _screen;
         private IStack _stack;
         private ICounter _counter;
-
-        private byte[] genReg;   // 16 general purpose 8 bit registers
-        private byte[] iReg;     // 1 16 bit register
-        private byte delayReg;   // 8 bit delay register
-        private byte soundReg;   // 8 bit sound register
-        private byte[] pCount;   // 16 bit program counter
+        private IRegisters _registers;
 
         private bool delayTimer; // delay timer. Active when delayReg is not 0
         private bool soundTimer; // sound timer. Active when soundReg is not 0
 
-        public Chip8(IMemory memory, IScreen screen, IStack stack, ICounter counter)
+        public Chip8(IMemory memory, IScreen screen, IStack stack, ICounter counter, IRegisters registers)
         {
             _memory = memory ?? throw new ArgumentNullException(nameof(memory));
             _screen = screen ?? throw new ArgumentNullException(nameof(screen));
             _stack = stack ?? throw new ArgumentNullException(nameof(stack));
             _counter = counter ?? throw new ArgumentNullException(nameof(counter));
-
-            genReg = new byte[16];
-            iReg = new byte[2];
-            delayReg = new byte();
-            soundReg = new byte();
-            pCount = new byte[2];
+            _registers = registers ?? throw new ArgumentNullException(nameof(registers));
 
             delayTimer = false;
             soundTimer = false;
@@ -52,7 +42,7 @@
                         default:
                             throw new InvalidOperationException("not implemented");
                     }
-                break;
+                    break;
 
                 case 0x1000:    // JP addr
                     _counter.SetTo(instruction & 0x0FFF);
@@ -64,6 +54,45 @@
                     break;
 
                 case 0x3000:    // SE Vx, byte
+                    if (_registers.GetVReg(instruction * 0x0F00) == (instruction & 0x00FF))
+                        _counter.Increment();
+                    break;
+
+                case 0x4000:    // SNE Vx, byte
+                    if (_registers.GetVReg(instruction * 0x0F00) != (instruction & 0x00FF))
+                        _counter.Increment();
+                    break;
+
+                case 0x5000:    // SE Vx, Vy
+                    if (_registers.GetVReg(instruction * 0x0F00) == _registers.GetVReg(instruction * 0x00F0))
+                        _counter.Increment();
+                    break;
+
+                case 0x6000:    // LD Vx, byte
+                    _registers.SetVReg(instruction & 0x0F00, instruction & 0x00FF);
+                    break;
+
+                case 0x7000:    // ADD Vx, byte
+                    _registers.AddAtVReg(instruction & 0x0F00, instruction & 0x00FF);
+                    break;
+
+                case 0x8000:
+                    switch (instruction & 0x000F)
+                    {
+                        case 0x0001:    // LD Vx, Vy
+                            _registers.SetVReg(instruction & 0x0F00, instruction & 0x00F0);
+                            break;
+
+                        case 0x0002:    // OR Vx, Vy
+                            _registers.BitwiseOrToVx(instruction & 0x0F00, instruction & 0x00F0);
+                            break;
+
+                        case 0x0003:    // XOR Vx, Vy
+                            _registers.BitwiseXorToVx(instruction & 0x0F00, instruction & 0x00F0);
+                            break;
+                    }
+                    break;
+
 
             }
         }

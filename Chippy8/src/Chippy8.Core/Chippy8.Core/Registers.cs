@@ -29,5 +29,19 @@
         public void BitwiseAndToVx(int regX, int regY) => vReg[regX] = (byte)(regX & regY);
 
         public void BitwiseXorToVx(int regX, int regY) => vReg[regX] = (byte)(regX ^ regY);
+
+        public void AddToVxAndCarryToVf(int regX, int regY)
+        {
+            var result = regX + regY;
+            vReg[15] = (byte)((result > 255) ? 1 : 0);
+            vReg[regX] = (byte)(result & 0xFF);
+        }
+
+        public void SubFromVxAndCarryToVf(int regX, int regY)
+        {
+            var result = regX - regY;
+            vReg[15] = (byte)((regX > regY) ? 1 : 0);
+            vReg[regX] = (byte)result;
+        }
     }
 }

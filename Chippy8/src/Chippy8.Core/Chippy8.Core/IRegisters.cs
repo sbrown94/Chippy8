@@ -8,5 +8,8 @@
         public void BitwiseOrToVx(int regX, int regY);
         public void BitwiseAndToVx(int regX, int regY);
         public void BitwiseXorToVx(int regX, int regY);
+        public void AddToVxAndCarryToVf(int regX, int regY);
+        public void SubFromVxAndCarryToVf(int regX, int regY);
+
     }
 }

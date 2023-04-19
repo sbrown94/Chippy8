@@ -90,6 +90,16 @@
                         case 0x0003:    // XOR Vx, Vy
                             _registers.BitwiseXorToVx(instruction & 0x0F00, instruction & 0x00F0);
                             break;
+
+                        case 0x0004:    // ADD Vx, Vy
+                            _registers.AddToVxAndCarryToVf(instruction & 0x0F00, instruction & 0x00F0);
+                            break;
+
+                        case 0x0005:    // SUB Vx, Vy
+                            _registers.SubFromVxAndCarryToVf(instruction, & 0x0F00, instruction & 0x00F0);
+                            break;
+
+                        case 0x0006:
                     }
                     break;
 

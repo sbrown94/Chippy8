@@ -14,5 +14,10 @@
             Data[location] = data;
             return true;
         }
+
+        public byte[] Read(short start, byte length)
+        {
+            return (byte[])Data.Skip(start).Take(length);
+        }
     }
 }

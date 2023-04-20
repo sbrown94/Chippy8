@@ -96,12 +96,42 @@
                             break;
 
                         case 0x0005:    // SUB Vx, Vy
-                            _registers.SubFromVxAndCarryToVf(instruction, & 0x0F00, instruction & 0x00F0);
+                            _registers.SubFromVxAndCarryToVf(instruction & 0x0F00, instruction & 0x00F0);
                             break;
 
-                        case 0x0006:
+                        case 0x0006:    // SHR Vx {, Vy}
+                            _registers.ShrVx(instruction & 0x0F00, instruction & 0x00F0);
+                            break;
+
+                        case 0x0007:    // SUBN Vx, Vy
+                            _registers.SubnVx(instruction & 0x0F00, instruction & 0x00F0);
+                            break;
+
+                        case 0x0008:    // SHL Vx {, Vy}
+                            _registers.ShlVx(instruction & 0x0F00, instruction & 0x00F0);
+                            break;
                     }
                     break;
+
+                case 0x9000:    // SNE Vx, Vy
+                    if (!_registers.AreEqual(instruction & 0x0F00, instruction & 0x00F0))
+                        _counter.Increment();
+                    break;
+
+                case 0xA000:    // LD I, addr
+                    _registers.SetIReg(instruction & 0x0FFF);
+                    break;
+
+                case 0xB000:    // JP V0, addr
+                    _counter.SetTo(_registers.GetVReg(0));
+                    break;
+
+                case 0xC000:    // RND Vx, byte
+                    _registers.BitwiseAndWithInputToVx(instruction & 0x0F00, new Random().Next(255), instruction & 0x00FF);
+                    break;
+
+                case 0xD000:    // DRW Vx, Vy, nibble
+                    var mem = _memory.Read(_registers.GetIReg(), (byte)(instruction & 0x000F));
 
 
             }

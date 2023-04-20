@@ -7,9 +7,15 @@
         public void AddAtVReg(int register, int value);
         public void BitwiseOrToVx(int regX, int regY);
         public void BitwiseAndToVx(int regX, int regY);
+        public void BitwiseAndWithInputToVx(int regX, int rand, int input);
         public void BitwiseXorToVx(int regX, int regY);
         public void AddToVxAndCarryToVf(int regX, int regY);
         public void SubFromVxAndCarryToVf(int regX, int regY);
-
+        public void ShrVx(int regX, int regY);
+        public void SubnVx(int regX, int regY);
+        public void ShlVx(int regX, int regY);
+        public bool AreEqual(int regX, int regY);
+        public void SetIReg(int value);
+        public short GetIReg();
     }
 }

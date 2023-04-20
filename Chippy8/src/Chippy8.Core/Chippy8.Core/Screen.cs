@@ -25,5 +25,11 @@ namespace Chippy8.Core
                 }
             }
         }
+
+        public bool DrawToScreen(int x, int y)
+        {
+            if (Matrix[x, y] == true)
+
+        }
     }
 }

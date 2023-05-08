@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Chippy8.GUI;
+using System.Collections;
 using System.Timers;
 
 namespace Chippy8.Core
@@ -12,11 +13,12 @@ namespace Chippy8.Core
         private IRegisters _registers;
         private IInput _input;
         private ITimers _timers;
+        private IWindow _window;
 
         private int _gameState;
         private bool _terminating;
 
-        public Chip8(IMemory memory, IScreen screen, IStack stack, ICounter counter, IRegisters registers, IInput input, ITimers timers)
+        public Chip8(IMemory memory, IScreen screen, IStack stack, ICounter counter, IRegisters registers, IInput input, ITimers timers, IWindow window)
         {
             _memory = memory ?? throw new ArgumentNullException(nameof(memory));
             _screen = screen ?? throw new ArgumentNullException(nameof(screen));
@@ -25,6 +27,7 @@ namespace Chippy8.Core
             _registers = registers ?? throw new ArgumentNullException(nameof(registers));
             _input = input ?? throw new ArgumentNullException(nameof(input));
             _timers = timers ?? throw new ArgumentNullException(nameof(timers));
+            _window = window ?? throw new ArgumentNullException(nameof(window));
 
             _gameState = 0; // 0 = running, 1 = paused, 2 = wait for input
             _terminating = false; // shutdown command issued
@@ -34,6 +37,7 @@ namespace Chippy8.Core
         public void Boot()
         {
             var timer = new System.Timers.Timer(700);
+            _window.Init();
 
             while (!_terminating)
             {

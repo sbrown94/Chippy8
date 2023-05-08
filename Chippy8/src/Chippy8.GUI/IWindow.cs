@@ -3,5 +3,6 @@
     public interface IWindow
     {
         public void Render(bool[,] display);
+        public void Init();
     }
 }

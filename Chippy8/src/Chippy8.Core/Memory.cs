@@ -2,11 +2,11 @@
 {
     public class Memory : IMemory
     {
-        private byte[] Data;
+        private short[] Data;
 
         public Memory()
         {
-            Data = new byte[0x1000]; // 4096 bytes
+            Data = new short[0x500]; // 4096 bytes
         }
 
         public bool Write(byte data, byte location)
@@ -15,13 +15,9 @@
             return true;
         }
 
-        public short[] Read(short start, byte length)
+        public short[] Read(short start, short length)
         {
-            var data = Data.Skip(start).Take(length).ToArray();
-            short[] sdata = new short[(int)Math.Ceiling((double)data.Length / 2)];
-            Buffer.BlockCopy(data, 0, sdata, 0, data.Length);
-
-            return sdata;
+            return Data.Skip(start).Take(length).ToArray();
         }
 
         public void LoadProgram(string path)

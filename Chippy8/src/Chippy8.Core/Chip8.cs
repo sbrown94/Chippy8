@@ -180,7 +180,11 @@ namespace Chippy8.Core
 
                     for (var i = 0; i < ((int)instruction & 0x000F); i++)
                     {
-                        var sprBitArr = new BitArray(_memory.Read(_registers.GetIReg(), 1));
+                        var memDat = _memory.Read(_registers.GetIReg(), 2);
+
+                        var bytes = BitConverter.GetBytes(memDat[0]);
+
+                        var sprBitArr = new BitArray(bytes);
 
                         for(var j = 0; j < sprBitArr.Length; j++)
                         {

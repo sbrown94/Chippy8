@@ -1,4 +1,6 @@
-﻿namespace Chippy8.Core
+﻿using System.Collections;
+
+namespace Chippy8.Core
 {
     public class Chip8
     {
@@ -131,8 +133,25 @@
                     break;
 
                 case 0xD000:    // DRW Vx, Vy, nibble
-                    var mem = _memory.Read(_registers.GetIReg(), (byte)(instruction & 0x000F));
+                    var xCrd = _registers.GetVReg((instruction & 0x0F00) & 63);
+                    var yCrd = _registers.GetVReg((instruction & 0x00F0) & 31);
 
+                    _registers.SetVReg(15, 0);
+
+                    for (var i = 0; i < ((int)instruction & 0x000F); i++)
+                    {
+                        var sprBitArr = new BitArray(_memory.Read(_registers.GetIReg(), 1));
+
+                        for(var j = 0; j < sprBitArr.Length; j++)
+                        {
+                            if (bit == 1)
+                            _screen.InvertPixelAndReturnShouldSetVF()
+                        }
+
+                    }
+
+                    var mem = _memory.Read(_registers.GetIReg(), (byte)(instruction & 0x000F));
+                    _screen.
 
             }
         }

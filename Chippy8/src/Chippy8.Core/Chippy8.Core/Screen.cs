@@ -26,10 +26,18 @@ namespace Chippy8.Core
             }
         }
 
-        public bool DrawToScreen(int x, int y)
+        public bool 
+
+        public bool InvertPixelAndReturnShouldSetVF(int x, int y)
         {
             if (Matrix[x, y] == true)
+            {
+                Matrix[x, y] = false;
+                return true;
+            }
 
+            Matrix[x, y] = true;
+            return false;
         }
     }
 }

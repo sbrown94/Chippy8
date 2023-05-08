@@ -9,20 +9,16 @@ namespace Chippy8.Core
         private IStack _stack;
         private ICounter _counter;
         private IRegisters _registers;
+        private IInput _input;
 
-        private bool delayTimer; // delay timer. Active when delayReg is not 0
-        private bool soundTimer; // sound timer. Active when soundReg is not 0
-
-        public Chip8(IMemory memory, IScreen screen, IStack stack, ICounter counter, IRegisters registers)
+        public Chip8(IMemory memory, IScreen screen, IStack stack, ICounter counter, IRegisters registers, IInput input)
         {
             _memory = memory ?? throw new ArgumentNullException(nameof(memory));
             _screen = screen ?? throw new ArgumentNullException(nameof(screen));
             _stack = stack ?? throw new ArgumentNullException(nameof(stack));
             _counter = counter ?? throw new ArgumentNullException(nameof(counter));
             _registers = registers ?? throw new ArgumentNullException(nameof(registers));
-
-            delayTimer = false;
-            soundTimer = false;
+            _input = input ?? throw new ArgumentNullException(nameof(input));
         }
 
         // Refer to http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#3.1 for instruction documentation
@@ -155,6 +151,28 @@ namespace Chippy8.Core
                     }
 
                     break;
+
+                case 0xE000:
+                    switch (instruction & 0x00FF)
+                    {
+                        case 0x009E:    // SKP Vx
+                            if (_input.IsPressed(instruction & 0x0F00))
+                                _counter.Increment();
+                            break;
+
+                        case 0x00A1:    // SKNP Vx
+                            if (!_input.IsPressed(instruction & 0x0F00))
+                                _counter.Increment();
+                            break;
+                    }
+                    break;
+
+                case 0xF000:
+                    switch (instruction & 0x00FF)
+                    {
+                        case 0x0007:    // LD Vx, DT
+
+                    }
 
             }
         }

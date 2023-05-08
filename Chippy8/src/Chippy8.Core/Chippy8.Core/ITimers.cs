@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Chippy8.Core
+﻿namespace Chippy8.Core
 {
-    internal class ITimers
+    public interface ITimers
     {
+        public bool GetDelayTimer();
+
+        public void SetDelayTimer(bool dT);
+
+        public bool GetSoundTimer();
+
+        public void SetSoundTimer(bool sT);
     }
 }

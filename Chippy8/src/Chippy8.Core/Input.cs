@@ -12,6 +12,7 @@
         public void Capture()
         {
             // idk come back to this
+            return;
             throw new NotImplementedException();
         }
 

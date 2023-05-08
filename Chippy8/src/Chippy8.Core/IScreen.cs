@@ -5,5 +5,7 @@
         public void ClearScreen();
 
         public bool InvertPixelAndReturnShouldSetVF(int x, int y);
+
+        public bool[,] GetScreen();
     }
 }

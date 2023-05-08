@@ -8,36 +8,41 @@ namespace Chippy8.GUI
     public class Window : IWindow
     {
         public RenderWindow _window;
+        public RenderTexture _texture;
+
+        public int _gridWidth = 32;
+        public int _gridHeight = 64;
 
         public void Init()
         {
             // Create a new window with a resolution of 800x600 pixels and a title of "SFML Example"
-            _window = new RenderWindow(new VideoMode(800, 600), "SFML Example");
+            _window = new RenderWindow(new VideoMode((uint)_gridWidth, (uint)_gridHeight), "SFML Example");
+            _texture = new RenderTexture(64, 32);
         }
 
         public void Render(bool[,] display)
         {
-            // Create a circle shape with a radius of 50 pixels
-            var circle = new CircleShape(50)
+            for (int i = 0; i < 64; i++)
             {
-                FillColor = Color.Red,
-                Position = new Vector2f(400, 300),
-                Origin = new Vector2f(50, 50)
-            };
+                for (int j = 0; j < 32; j++)
+                {
+                    if (display[i, j])
+                    {
+                        var pixel = new RectangleShape(new Vector2f(1, 1));
+                        pixel.Position = new Vector2f(i, j);
+                        pixel.FillColor = Color.White;
+                        _texture.Draw(pixel);
+                    }
+                }
+            }
 
-            //// Create a texture from the pixel array and a sprite from the texture
-            //var texture = new Texture((uint)GridWidth, (uint)GridHeight);
-            //texture.Update(pixelData);
-            //var sprite = new Sprite(texture)
-            //{
-            //    Scale = new Vector2f(PixelSize, PixelSize)
-            //};
+            _texture.Display();
+            var sprite = new Sprite(_texture.Texture);
 
-            // Handle events
             _window.DispatchEvents();
 
             // Draw the circle shape
-            _window.Draw(circle);
+            _window.Draw(sprite);
 
             // Display the window contents on screen
             _window.Display();

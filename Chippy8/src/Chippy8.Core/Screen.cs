@@ -37,5 +37,7 @@ namespace Chippy8.Core
             Matrix[x, y] = true;
             return false;
         }
+
+        public bool[,] GetScreen() => Matrix;
     }
 }

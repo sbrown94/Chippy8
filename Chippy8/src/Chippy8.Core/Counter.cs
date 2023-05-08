@@ -2,19 +2,19 @@
 {
     public class Counter : ICounter
     {
-        private int pCounter;
+        private short pCounter;
 
         public Counter()
         {
-            pCounter = 0;
+            pCounter = 0x200;
         }
 
-        public int Get() => pCounter;
+        public short Get() => pCounter;
 
         public void Increment() => pCounter+=2;
 
         public void Decrement() => pCounter-=2;
 
-        public void SetTo(int value) => pCounter = value;
+        public void SetTo(short value) => pCounter = value;
     }
 }

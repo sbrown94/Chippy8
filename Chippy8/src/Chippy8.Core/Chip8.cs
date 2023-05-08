@@ -34,42 +34,38 @@ namespace Chippy8.Core
 
         }
 
-        public void Boot()
+        public void Boot(string programPath)
         {
-            var timer = new System.Timers.Timer(700);
+
+            _memory.LoadProgram(programPath);
             _window.Init();
 
             while (!_terminating)
             {
-                _window.Render(null);
-                timer.Elapsed += (sender, e) =>
+            _window.Render(_screen.GetScreen());
+                switch (_gameState)
                 {
-                    switch (_gameState)
-                    {
-                        case 0:
+                    case 0:
 
-                            _input.Capture();
-                            //ExecuteInstruction();
-                            //TODO: export to GUI library
-                            break;
+                        _input.Capture();                         
+                        ExecuteInstruction(_memory.Read(_counter.Get(), 1)[0]);
+                        _counter.Increment();
+                        break;
 
-                        case 1:
-                            //pause
-                            break;
+                    case 1:
+                        //pause
+                        break;
 
-                        case 2:
-                            if (WaitForInput())
-                                _gameState = 0;
-                            break;
-                    }
-                };
+                    case 2:
+                        if (WaitForInput())
+                            _gameState = 0;
+                        break;
+                }
             }
-
-            
         }
 
         // Refer to http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#3.1 for instruction documentation
-        public void ExecuteInstruction(byte instruction)
+        public void ExecuteInstruction(short instruction)
         {
             switch (instruction & 0xF000)
             {
@@ -85,17 +81,18 @@ namespace Chippy8.Core
                             _counter.SetTo(_stack.Pop());
                             break;
                         default:
-                            throw new InvalidOperationException("not implemented");
+                            // ignore 0xnnn
+                            break;
                     }
                     break;
 
                 case 0x1000:    // JP addr
-                    _counter.SetTo(instruction & 0x0FFF);
+                    _counter.SetTo((short)(instruction & 0x0FFF));
                     break;
 
                 case 0x2000:    // CALL addr
                     _stack.Push((byte)_counter.Get());
-                    _counter.SetTo(instruction & 0x0FFF);
+                    _counter.SetTo((short)(instruction & 0x0FFF));
                     break;
 
                 case 0x3000:    // SE Vx, byte

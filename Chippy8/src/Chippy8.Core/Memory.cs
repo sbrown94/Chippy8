@@ -15,9 +15,19 @@
             return true;
         }
 
-        public byte[] Read(short start, byte length)
+        public short[] Read(short start, byte length)
         {
-            return (byte[])Data.Skip(start).Take(length);
+            var data = Data.Skip(start).Take(length).ToArray();
+            short[] sdata = new short[(int)Math.Ceiling((double)data.Length / 2)];
+            Buffer.BlockCopy(data, 0, sdata, 0, data.Length);
+
+            return sdata;
+        }
+
+        public void LoadProgram(string path)
+        {
+            var bytes = File.ReadAllBytes(path);
+            Array.Copy(bytes, 0, Data, 0x200, bytes.Length);
         }
     }
 }

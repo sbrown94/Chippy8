@@ -17,5 +17,9 @@
         public bool AreEqual(int regX, int regY);
         public void SetIReg(int value);
         public short GetIReg();
+        public byte SetDelayReg(byte value);
+        public byte GetDelayReg();
+        public byte SetSoundReg(byte value);
+        public byte GetSoundReg();
     }
 }

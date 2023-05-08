@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Timers;
 
 namespace Chippy8.Core
 {
@@ -10,8 +11,12 @@ namespace Chippy8.Core
         private ICounter _counter;
         private IRegisters _registers;
         private IInput _input;
+        private ITimers _timers;
 
-        public Chip8(IMemory memory, IScreen screen, IStack stack, ICounter counter, IRegisters registers, IInput input)
+        private int _gameState;
+        private bool _terminating;
+
+        public Chip8(IMemory memory, IScreen screen, IStack stack, ICounter counter, IRegisters registers, IInput input, ITimers timers)
         {
             _memory = memory ?? throw new ArgumentNullException(nameof(memory));
             _screen = screen ?? throw new ArgumentNullException(nameof(screen));
@@ -19,6 +24,40 @@ namespace Chippy8.Core
             _counter = counter ?? throw new ArgumentNullException(nameof(counter));
             _registers = registers ?? throw new ArgumentNullException(nameof(registers));
             _input = input ?? throw new ArgumentNullException(nameof(input));
+            _timers = timers ?? throw new ArgumentNullException(nameof(timers));
+
+            _gameState = 0; // 0 = running, 1 = paused, 2 = wait for input
+            _terminating = false; // shutdown command issued
+
+        }
+
+        public void Boot()
+        {
+            var timer = new System.Timers.Timer(700);
+
+            while (!_terminating)
+            {
+                timer.Elapsed += (sender, e) =>
+                {
+                    switch (_gameState)
+                    {
+                        case 0:
+                            
+                            _input.Capture();
+                            ExecuteInstruction();
+                            break;
+
+                        case 1:
+                            //pause
+                            break;
+
+                        case 2:
+                            if (WaitForInput())
+                                _gameState = 0;
+                            break;
+                    }
+                }
+            }
         }
 
         // Refer to http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#3.1 for instruction documentation
@@ -171,10 +210,35 @@ namespace Chippy8.Core
                     switch (instruction & 0x00FF)
                     {
                         case 0x0007:    // LD Vx, DT
+                            _registers.SetVReg(instruction & 0x0F00, _registers.GetDelayReg());
+                            break;
 
+                        case 0x000A:    // LD Vx, K
+                            _gameState = 2;
+                            break;
+
+                        case 0x0015:    // LD DT, Vx
+                            _registers.SetDelayReg((byte)(instruction & 0x0F00));
+                            break;
+
+                        case 0x0018:    // LD ST, Vx
+                            _registers.SetSoundReg((byte)(instruction & 0x0F00));
+                            break;
+
+                        case 0x001E:    // ADD I, Vx
+                            _registers.SetIReg(_registers.GetVReg(instruction & 0x0F00) + _registers.GetIReg());
+                            break;
+
+                        case 0x0029:    // LD F, Vx
+                            _registers.SetIReg()
                     }
 
             }
+        }
+
+        public bool WaitForInput()
+        {
+            var input = _input.WaitForInput
         }
     }
 }

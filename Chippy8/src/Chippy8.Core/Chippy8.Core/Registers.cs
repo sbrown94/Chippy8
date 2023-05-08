@@ -72,5 +72,13 @@
         public void SetIReg(short value) => iReg = value;
 
         public short GetIReg() => iReg;
+
+        public byte SetDelayReg(byte value) => delayReg = value;
+
+        public byte GetDelayReg() => delayReg;
+
+        public byte SetSoundReg(byte value) => soundReg = value;
+
+        public byte GetSoundReg() => soundReg;
     }
 }

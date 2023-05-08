@@ -41,6 +41,7 @@ namespace Chippy8.Core
 
             while (!_terminating)
             {
+                _window.Render(null);
                 timer.Elapsed += (sender, e) =>
                 {
                     switch (_gameState)

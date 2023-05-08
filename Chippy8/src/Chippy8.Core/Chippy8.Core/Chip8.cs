@@ -144,14 +144,17 @@ namespace Chippy8.Core
 
                         for(var j = 0; j < sprBitArr.Length; j++)
                         {
-                            if (bit == 1)
-                            _screen.InvertPixelAndReturnShouldSetVF()
+                            if (sprBitArr[j] == true)
+                                if (_screen.InvertPixelAndReturnShouldSetVF(xCrd+j, yCrd))
+                                    _registers.SetVReg(15, 1);
+
+                            xCrd++;
                         }
 
+                        yCrd++;
                     }
 
-                    var mem = _memory.Read(_registers.GetIReg(), (byte)(instruction & 0x000F));
-                    _screen.
+                    break;
 
             }
         }

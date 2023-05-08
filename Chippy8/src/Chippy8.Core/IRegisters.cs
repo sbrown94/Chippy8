@@ -15,7 +15,7 @@
         public void SubnVx(int regX, int regY);
         public void ShlVx(int regX, int regY);
         public bool AreEqual(int regX, int regY);
-        public void SetIReg(int value);
+        public void SetIReg(short value);
         public short GetIReg();
         public byte SetDelayReg(byte value);
         public byte GetDelayReg();

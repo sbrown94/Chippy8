@@ -42,9 +42,10 @@ namespace Chippy8.Core
                     switch (_gameState)
                     {
                         case 0:
-                            
+
                             _input.Capture();
-                            ExecuteInstruction();
+                            //ExecuteInstruction();
+                            //TODO: export to GUI library
                             break;
 
                         case 1:
@@ -56,8 +57,10 @@ namespace Chippy8.Core
                                 _gameState = 0;
                             break;
                     }
-                }
+                };
             }
+
+            
         }
 
         // Refer to http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#3.1 for instruction documentation
@@ -86,7 +89,7 @@ namespace Chippy8.Core
                     break;
 
                 case 0x2000:    // CALL addr
-                    _stack.Push(_counter.Get());
+                    _stack.Push((byte)_counter.Get());
                     _counter.SetTo(instruction & 0x0FFF);
                     break;
 
@@ -156,7 +159,7 @@ namespace Chippy8.Core
                     break;
 
                 case 0xA000:    // LD I, addr
-                    _registers.SetIReg(instruction & 0x0FFF);
+                    _registers.SetIReg((short)(instruction & 0x0FFF));
                     break;
 
                 case 0xB000:    // JP V0, addr
@@ -226,19 +229,22 @@ namespace Chippy8.Core
                             break;
 
                         case 0x001E:    // ADD I, Vx
-                            _registers.SetIReg(_registers.GetVReg(instruction & 0x0F00) + _registers.GetIReg());
+                            _registers.SetIReg((short)(_registers.GetVReg(instruction & 0x0F00) + _registers.GetIReg()));
                             break;
 
                         case 0x0029:    // LD F, Vx
-                            _registers.SetIReg()
+                            //_registers.SetIReg()
+                            break;
                     }
+                    break;
 
             }
         }
 
         public bool WaitForInput()
         {
-            var input = _input.WaitForInput
+            return false;
+            //var input = _input.WaitForInput
         }
     }
 }

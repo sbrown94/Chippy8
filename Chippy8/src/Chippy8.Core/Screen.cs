@@ -19,14 +19,12 @@ namespace Chippy8.Core
         {
             for (var col = 0; col < Matrix.GetLength(0); col++)
             {
-                for (var row = 0; row < Matrix.GetLength(1), row++)
+                for (var row = 0; row < Matrix.GetLength(1); row++)
                 {
                     Matrix[col, row] = false;
                 }
             }
         }
-
-        public bool 
 
         public bool InvertPixelAndReturnShouldSetVF(int x, int y)
         {

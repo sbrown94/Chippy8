@@ -10,7 +10,7 @@
         public Registers()
         {
             vReg = new byte[16];
-            iReg = new byte[2];
+            iReg = new short();
             delayReg = new byte();
             soundReg = new byte();
         }

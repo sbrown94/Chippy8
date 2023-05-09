@@ -2,19 +2,19 @@
 {
     public class Counter : ICounter
     {
-        private short pCounter;
+        private ushort pCounter;
 
         public Counter()
         {
-            pCounter = 0x200;
+            pCounter = 0x100;
         }
 
-        public short Get() => pCounter;
+        public ushort Get() => pCounter;
 
         public void Increment() => pCounter+=2;
 
         public void Decrement() => pCounter-=2;
 
-        public void SetTo(short value) => pCounter = value;
+        public void SetTo(ushort value) => pCounter = value;
     }
 }

@@ -64,8 +64,10 @@ namespace Chippy8.Core
             }
         }
 
+        // YOUR WHOLE UNDERSTANDING OF BIT MASKING IS WRONG. FIX IT!
+
         // Refer to http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#3.1 for instruction documentation
-        public void ExecuteInstruction(short instruction)
+        public void ExecuteInstruction(ushort instruction)
         {
             switch (instruction & 0xF000)
             {
@@ -87,12 +89,12 @@ namespace Chippy8.Core
                     break;
 
                 case 0x1000:    // JP addr
-                    _counter.SetTo((short)(instruction & 0x0FFF));
+                    _counter.SetTo((ushort)(instruction & 0x0FFF));
                     break;
 
                 case 0x2000:    // CALL addr
                     _stack.Push((byte)_counter.Get());
-                    _counter.SetTo((short)(instruction & 0x0FFF));
+                    _counter.SetTo((ushort)(instruction & 0x0FFF));
                     break;
 
                 case 0x3000:    // SE Vx, byte
@@ -161,7 +163,7 @@ namespace Chippy8.Core
                     break;
 
                 case 0xA000:    // LD I, addr
-                    _registers.SetIReg((short)(instruction & 0x0FFF));
+                    _registers.SetIReg((ushort)(instruction & 0x0FFF));
                     break;
 
                 case 0xB000:    // JP V0, addr
@@ -173,14 +175,14 @@ namespace Chippy8.Core
                     break;
 
                 case 0xD000:    // DRW Vx, Vy, nibble
-                    var xCrd = _registers.GetVReg((instruction & 0x0F00) & 63);
-                    var yCrd = _registers.GetVReg((instruction & 0x00F0) & 31);
+                    var xCrd = _registers.GetVReg(instruction & 0x0F00) % 63;
+                    var yCrd = _registers.GetVReg(instruction & 0x00F0) & 31;
 
                     _registers.SetVReg(15, 0);
 
                     for (var i = 0; i < ((int)instruction & 0x000F); i++)
                     {
-                        var memDat = _memory.Read(_registers.GetIReg(), 2);
+                        var memDat = _memory.Read(_registers.GetIReg(), 1);
 
                         var bytes = BitConverter.GetBytes(memDat[0]);
 
@@ -235,7 +237,7 @@ namespace Chippy8.Core
                             break;
 
                         case 0x001E:    // ADD I, Vx
-                            _registers.SetIReg((short)(_registers.GetVReg(instruction & 0x0F00) + _registers.GetIReg()));
+                            _registers.SetIReg((ushort)(_registers.GetVReg(instruction & 0x0F00) + _registers.GetIReg()));
                             break;
 
                         case 0x0029:    // LD F, Vx

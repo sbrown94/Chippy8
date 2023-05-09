@@ -2,11 +2,11 @@
 {
     public class Memory : IMemory
     {
-        private short[] Data;
+        private ushort[] Data;
 
         public Memory()
         {
-            Data = new short[0x500]; // 4096 bytes
+            Data = new ushort[0x800]; // 4096 bytes
         }
 
         public bool Write(byte data, byte location)
@@ -15,7 +15,7 @@
             return true;
         }
 
-        public short[] Read(short start, short length)
+        public ushort[] Read(ushort start, ushort length)
         {
             return Data.Skip(start).Take(length).ToArray();
         }
@@ -23,7 +23,15 @@
         public void LoadProgram(string path)
         {
             var bytes = File.ReadAllBytes(path);
-            Array.Copy(bytes, 0, Data, 0x200, bytes.Length);
+
+
+            ushort[] ushorts = new ushort[bytes.Length / 2];
+            for (int i = 0; i < ushorts.Length; i++)
+            {
+                ushorts[i] = (ushort)((bytes[2 * i] << 8) | bytes[2 * i + 1]);
+            }
+
+            Array.Copy(ushorts, 0, Data, 0x100, ushorts.Length);
         }
     }
 }

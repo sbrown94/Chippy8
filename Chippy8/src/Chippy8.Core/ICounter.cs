@@ -2,9 +2,9 @@
 {
     public interface ICounter
     {
-        public short Get();
+        public ushort Get();
         public void Increment();
         public void Decrement();
-        public void SetTo(short value);
+        public void SetTo(ushort value);
     }
 }

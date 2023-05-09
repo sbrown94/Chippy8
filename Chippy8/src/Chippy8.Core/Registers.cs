@@ -3,14 +3,14 @@
     public class Registers : IRegisters
     {
         private byte[] vReg;     // 16 general purpose 8 bit registers
-        private short iReg;     // 1 16 bit register
+        private ushort iReg;     // 1 16 bit register
         private byte delayReg;   // 8 bit delay register
         private byte soundReg;   // 8 bit sound register
 
         public Registers()
         {
             vReg = new byte[16];
-            iReg = new short();
+            iReg = new ushort();
             delayReg = new byte();
             soundReg = new byte();
         }
@@ -69,9 +69,9 @@
             return regX == regY;
         }
 
-        public void SetIReg(short value) => iReg = value;
+        public void SetIReg(ushort value) => iReg = value;
 
-        public short GetIReg() => iReg;
+        public ushort GetIReg() => iReg;
 
         public byte SetDelayReg(byte value) => delayReg = value;
 

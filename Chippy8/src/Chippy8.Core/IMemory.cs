@@ -3,7 +3,7 @@
     public interface IMemory
     {
         public bool Write(byte data, byte location);
-        public short[] Read(short start, short length);
+        public ushort[] Read(ushort start, ushort length);
 
         public void LoadProgram(string path);
     }

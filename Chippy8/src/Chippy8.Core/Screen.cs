@@ -28,6 +28,9 @@ namespace Chippy8.Core
 
         public bool InvertPixelAndReturnShouldSetVF(int x, int y)
         {
+            if (x >= 64 || y >= 32)
+                return false;
+
             if (Matrix[x, y] == true)
             {
                 Matrix[x, y] = false;

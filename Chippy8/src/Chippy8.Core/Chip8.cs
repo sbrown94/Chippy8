@@ -47,7 +47,29 @@ namespace Chippy8.Core
                 {
                     case 0:
 
-                        _input.Capture();                         
+                        _input.Capture();
+
+                        if (_counter.Get() >= 2048)
+                        {
+                            _counter.SetTo(2047);
+                            for (int y = 0; y < 32; y++)
+                            {
+                                for (int x = 0; x < 64; x++)
+                                {
+                                    if (_screen.GetScreen()[x, y])
+                                    {
+                                        Console.Write("X");
+                                    }
+                                    else
+                                    {
+                                        Console.Write(".");
+                                    }
+                                }
+                                Console.WriteLine();
+                            }
+                            Console.ReadLine();
+                        }
+
                         ExecuteInstruction(_memory.Read(_counter.Get(), 1)[0]);
                         _counter.Increment();
                         break;
@@ -64,11 +86,11 @@ namespace Chippy8.Core
             }
         }
 
-        // YOUR WHOLE UNDERSTANDING OF BIT MASKING IS WRONG. FIX IT!
-
         // Refer to http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#3.1 for instruction documentation
         public void ExecuteInstruction(ushort instruction)
         {
+            var DEBUG = instruction.ToString("X4");
+
             switch (instruction & 0xF000)
             {
                 case 0x0000:
@@ -89,81 +111,81 @@ namespace Chippy8.Core
                     break;
 
                 case 0x1000:    // JP addr
-                    _counter.SetTo((ushort)(instruction & 0x0FFF));
+                    _counter.SetTo(ValAtIdx(instruction, 2, 3));
                     break;
 
                 case 0x2000:    // CALL addr
                     _stack.Push((byte)_counter.Get());
-                    _counter.SetTo((ushort)(instruction & 0x0FFF));
+                    _counter.SetTo(ValAtIdx(instruction, 2, 3));
                     break;
 
                 case 0x3000:    // SE Vx, byte
-                    if (_registers.GetVReg(instruction * 0x0F00) == (instruction & 0x00FF))
+                    if (_registers.GetVReg(ValAtIdx(instruction, 2, 1)) == (ValAtIdx(instruction, 3, 2)))
                         _counter.Increment();
                     break;
 
                 case 0x4000:    // SNE Vx, byte
-                    if (_registers.GetVReg(instruction * 0x0F00) != (instruction & 0x00FF))
+                    if (_registers.GetVReg(ValAtIdx(instruction, 2, 1)) != (ValAtIdx(instruction, 3, 2)))
                         _counter.Increment();
                     break;
 
                 case 0x5000:    // SE Vx, Vy
-                    if (_registers.GetVReg(instruction * 0x0F00) == _registers.GetVReg(instruction * 0x00F0))
+                    if (_registers.GetVReg(ValAtIdx(instruction, 2, 1)) == _registers.GetVReg(ValAtIdx(instruction, 3, 1)))
                         _counter.Increment();
                     break;
 
                 case 0x6000:    // LD Vx, byte
-                    _registers.SetVReg(instruction & 0x0F00, instruction & 0x00FF);
+                    _registers.SetVReg(ValAtIdx(instruction, 2, 1), ValAtIdx(instruction, 3, 2));
                     break;
 
                 case 0x7000:    // ADD Vx, byte
-                    _registers.AddAtVReg(instruction & 0x0F00, instruction & 0x00FF);
+                    _registers.AddAtVReg(ValAtIdx(instruction, 2, 1), ValAtIdx(instruction, 3, 2));
                     break;
 
                 case 0x8000:
                     switch (instruction & 0x000F)
                     {
                         case 0x0001:    // LD Vx, Vy
-                            _registers.SetVReg(instruction & 0x0F00, instruction & 0x00F0);
+                            _registers.SetVReg(ValAtIdx(instruction, 2, 1), ValAtIdx(instruction, 3, 1));
                             break;
 
                         case 0x0002:    // OR Vx, Vy
-                            _registers.BitwiseOrToVx(instruction & 0x0F00, instruction & 0x00F0);
+                            _registers.BitwiseOrToVx(ValAtIdx(instruction, 2, 1), ValAtIdx(instruction, 3, 1));
                             break;
 
                         case 0x0003:    // XOR Vx, Vy
-                            _registers.BitwiseXorToVx(instruction & 0x0F00, instruction & 0x00F0);
+                            _registers.BitwiseXorToVx(ValAtIdx(instruction, 2, 1), ValAtIdx(instruction, 3, 1));
                             break;
 
                         case 0x0004:    // ADD Vx, Vy
-                            _registers.AddToVxAndCarryToVf(instruction & 0x0F00, instruction & 0x00F0);
+                            _registers.AddToVxAndCarryToVf(ValAtIdx(instruction, 2, 1), ValAtIdx(instruction, 3, 1));
                             break;
 
                         case 0x0005:    // SUB Vx, Vy
-                            _registers.SubFromVxAndCarryToVf(instruction & 0x0F00, instruction & 0x00F0);
+                            _registers.SubFromVxAndCarryToVf(ValAtIdx(instruction, 2, 1), ValAtIdx(instruction, 3, 1));
                             break;
 
                         case 0x0006:    // SHR Vx {, Vy}
-                            _registers.ShrVx(instruction & 0x0F00, instruction & 0x00F0);
+                            _registers.ShrVx(ValAtIdx(instruction, 2, 1), ValAtIdx(instruction, 3, 1));
                             break;
 
                         case 0x0007:    // SUBN Vx, Vy
-                            _registers.SubnVx(instruction & 0x0F00, instruction & 0x00F0);
+                            _registers.SubnVx(ValAtIdx(instruction, 2, 1), ValAtIdx(instruction, 3, 1));
                             break;
 
                         case 0x0008:    // SHL Vx {, Vy}
-                            _registers.ShlVx(instruction & 0x0F00, instruction & 0x00F0);
+                            _registers.ShlVx(ValAtIdx(instruction, 2, 1), ValAtIdx(instruction, 3, 1));
                             break;
                     }
                     break;
 
                 case 0x9000:    // SNE Vx, Vy
-                    if (!_registers.AreEqual(instruction & 0x0F00, instruction & 0x00F0))
+                    if (!_registers.AreEqual(ValAtIdx(instruction, 2, 1), ValAtIdx(instruction, 3, 1)))
                         _counter.Increment();
                     break;
 
                 case 0xA000:    // LD I, addr
-                    _registers.SetIReg((ushort)(instruction & 0x0FFF));
+                    _registers.SetIReg(ValAtIdx(instruction, 2, 3));
                     break;
 
                 case 0xB000:    // JP V0, addr
@@ -171,47 +193,44 @@ namespace Chippy8.Core
                     break;
 
                 case 0xC000:    // RND Vx, byte
-                    _registers.BitwiseAndWithInputToVx(instruction & 0x0F00, new Random().Next(255), instruction & 0x00FF);
+                    _registers.BitwiseAndWithInputToVx(ValAtIdx(instruction, 2, 1), new Random().Next(255), ValAtIdx(instruction, 3, 2));
                     break;
 
                 case 0xD000:    // DRW Vx, Vy, nibble
-                    var xCrd = _registers.GetVReg(instruction & 0x0F00) % 63;
-                    var yCrd = _registers.GetVReg(instruction & 0x00F0) & 31;
+                    var xCrdBase = _registers.GetVReg(ValAtIdx(instruction, 2, 1)) % 64; 
+                    var yCrd = _registers.GetVReg(ValAtIdx(instruction, 3, 1)) % 32;
 
-                    _registers.SetVReg(15, 0);
+                    _registers.SetVReg(15, 0); // Reset VF register
 
-                    for (var i = 0; i < ((int)instruction & 0x000F); i++)
+                    for (var i = 0; i < ((int)ValAtIdx(instruction, 4, 1)); i++)
                     {
-                        var memDat = _memory.Read(_registers.GetIReg(), 1);
+                        var memDat = _memory.ReadByte((ushort)(_registers.GetIReg() + i)); 
+                        var sprBitArr = new BitArray(new byte[] { memDat });
 
-                        var bytes = BitConverter.GetBytes(memDat[0]);
-
-                        var sprBitArr = new BitArray(bytes);
-
-                        for(var j = 0; j < sprBitArr.Length; j++)
+                        var xCrd = xCrdBase; 
+                        for (var j = 0; j < sprBitArr.Length; j++)
                         {
-                            if (sprBitArr[j] == true)
-                                if (_screen.InvertPixelAndReturnShouldSetVF(xCrd+j, yCrd))
+                            if (sprBitArr[j])
+                            {
+                                if (_screen.InvertPixelAndReturnShouldSetVF(xCrd % 64, yCrd % 32))
                                     _registers.SetVReg(15, 1);
-
+                            }
                             xCrd++;
                         }
-
                         yCrd++;
                     }
-
                     break;
 
                 case 0xE000:
                     switch (instruction & 0x00FF)
                     {
                         case 0x009E:    // SKP Vx
-                            if (_input.IsPressed(instruction & 0x0F00))
+                            if (_input.IsPressed(ValAtIdx(instruction, 2, 1)))
                                 _counter.Increment();
                             break;
 
                         case 0x00A1:    // SKNP Vx
-                            if (!_input.IsPressed(instruction & 0x0F00))
+                            if (!_input.IsPressed(ValAtIdx(instruction, 2, 1)))
                                 _counter.Increment();
                             break;
                     }
@@ -221,7 +240,7 @@ namespace Chippy8.Core
                     switch (instruction & 0x00FF)
                     {
                         case 0x0007:    // LD Vx, DT
-                            _registers.SetVReg(instruction & 0x0F00, _registers.GetDelayReg());
+                            _registers.SetVReg(ValAtIdx(instruction, 2, 1), _registers.GetDelayReg());
                             break;
 
                         case 0x000A:    // LD Vx, K
@@ -229,15 +248,15 @@ namespace Chippy8.Core
                             break;
 
                         case 0x0015:    // LD DT, Vx
-                            _registers.SetDelayReg((byte)(instruction & 0x0F00));
+                            _registers.SetDelayReg((byte)(ValAtIdx(instruction, 2, 1)));
                             break;
 
                         case 0x0018:    // LD ST, Vx
-                            _registers.SetSoundReg((byte)(instruction & 0x0F00));
+                            _registers.SetSoundReg((byte)(ValAtIdx(instruction, 2, 1)));
                             break;
 
                         case 0x001E:    // ADD I, Vx
-                            _registers.SetIReg((ushort)(_registers.GetVReg(instruction & 0x0F00) + _registers.GetIReg()));
+                            _registers.SetIReg((ushort)(_registers.GetVReg(ValAtIdx(instruction, 2, 1)) + _registers.GetIReg()));
                             break;
 
                         case 0x0029:    // LD F, Vx
@@ -248,6 +267,10 @@ namespace Chippy8.Core
 
             }
         }
+
+        public ushort ValAtIdx(ushort num, int index, int length = 1) =>
+            (ushort)Convert.ToInt32(num.ToString("X4").Substring(index-1, length), 16);
+
 
         public bool WaitForInput()
         {

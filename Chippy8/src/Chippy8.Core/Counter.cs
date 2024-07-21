@@ -11,9 +11,9 @@
 
         public ushort Get() => pCounter;
 
-        public void Increment() => pCounter+=2;
+        public void Increment() => pCounter+=1;
 
-        public void Decrement() => pCounter-=2;
+        public void Decrement() => pCounter-=1;
 
         public void SetTo(ushort value) => pCounter = value;
     }

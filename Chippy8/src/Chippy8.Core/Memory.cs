@@ -20,6 +20,19 @@
             return Data.Skip(start).Take(length).ToArray();
         }
 
+        public byte ReadByte(ushort idx)
+        {
+            var arrayIndex = idx / 2;
+            if (arrayIndex % 2 == 0)
+            {
+                return (byte)(Data[arrayIndex] & 0xFF);
+            }
+            else
+            {
+                return (byte)(Data[arrayIndex] >> 8);
+            }
+        }
+
         public void LoadProgram(string path)
         {
             var bytes = File.ReadAllBytes(path);

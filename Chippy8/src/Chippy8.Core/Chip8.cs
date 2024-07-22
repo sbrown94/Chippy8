@@ -67,7 +67,6 @@ namespace Chippy8.Core
                                 }
                                 Console.WriteLine();
                             }
-                            Console.ReadLine();
                         }
 
                         ExecuteInstruction(_memory.Read(_counter.Get(), 1)[0]);
@@ -197,27 +196,32 @@ namespace Chippy8.Core
                     break;
 
                 case 0xD000:    // DRW Vx, Vy, nibble
-                    var xCrdBase = _registers.GetVReg(ValAtIdx(instruction, 2, 1)) % 64; 
-                    var yCrd = _registers.GetVReg(ValAtIdx(instruction, 3, 1)) % 32;
+                    var xCrdBase = _registers.GetVReg(ValAtIdx(instruction, 2, 1)) % 64;
+                    var yCrdBase = _registers.GetVReg(ValAtIdx(instruction, 3, 1)) % 32;
 
-                    _registers.SetVReg(15, 0); // Reset VF register
+                    _registers.SetVReg(15, 0);
 
                     for (var i = 0; i < ((int)ValAtIdx(instruction, 4, 1)); i++)
                     {
-                        var memDat = _memory.ReadByte((ushort)(_registers.GetIReg() + i)); 
-                        var sprBitArr = new BitArray(new byte[] { memDat });
+                        var memDat = _memory.ReadByte((ushort)(_registers.GetIReg() + i));
+                        var sprBitArr = new BitArray(8);
 
-                        var xCrd = xCrdBase; 
+                        for (int bit = 0; bit < 8; bit++)
+                        {
+                            bool isBitSet = (memDat & (1 << (7 - bit))) != 0;
+                            sprBitArr[bit] = isBitSet;
+                        }
+
                         for (var j = 0; j < sprBitArr.Length; j++)
                         {
                             if (sprBitArr[j])
                             {
-                                if (_screen.InvertPixelAndReturnShouldSetVF(xCrd % 64, yCrd % 32))
+                                var xPixel = (xCrdBase + j) % 64;
+                                var yPixel = (yCrdBase + i) % 32;
+                                if (_screen.InvertPixelAndReturnShouldSetVF(xPixel, yPixel))
                                     _registers.SetVReg(15, 1);
                             }
-                            xCrd++;
                         }
-                        yCrd++;
                     }
                     break;
 
@@ -274,6 +278,7 @@ namespace Chippy8.Core
 
         public bool WaitForInput()
         {
+            //var input = _input
             return false;
             //var input = _input.WaitForInput
         }

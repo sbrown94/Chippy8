@@ -23,13 +23,13 @@
         public byte ReadByte(ushort idx)
         {
             var arrayIndex = idx / 2;
-            if (arrayIndex % 2 == 0)
+            if (idx % 2 == 0)
             {
-                return (byte)(Data[arrayIndex] & 0xFF);
+                return (byte)(Data[arrayIndex] >> 8);
             }
             else
             {
-                return (byte)(Data[arrayIndex] >> 8);
+                return (byte)(Data[arrayIndex] & 0xFF);
             }
         }
 

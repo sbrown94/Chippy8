@@ -14,5 +14,3 @@ var serviceProvider = services.BuildServiceProvider();
 var app = serviceProvider.GetService<Chip8>();
 
 app.Boot("C:\\Projects\\Chippy8\\ROM\\IBM Logo.ch8");
-
-Console.ReadLine();

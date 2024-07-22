@@ -1,4 +1,6 @@
-﻿namespace Chippy8.Core
+﻿using SFML.Window;
+
+namespace Chippy8.Core
 {
     public class Input : IInput
     {
@@ -11,7 +13,9 @@
 
         public void Capture()
         {
-            // idk come back to this
+            //keyboard input capture
+            
+
             return;
             throw new NotImplementedException();
         }
